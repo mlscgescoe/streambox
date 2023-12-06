@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import Nextauth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prismadb from "@/lib/prismadb";
 import { compare } from 'bcrypt'
 
-export default NextAuth ({
+export default Nextauth ({
     providers: [
         Credentials({
             id: 'credentials',

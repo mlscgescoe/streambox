@@ -1,14 +1,14 @@
 import bcrypt from 'bcrypt'
-import {NextApiRequest, NextApiResponse} from 'next'
+import { NextApiRequest, NextApiResponse } from 'next'
 import prismadb from '@/lib/prismadb'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if(req.method !== 'POST') {
+    if (req.method !== 'POST') {
         return res.status(405).end();
     }
 
     try {
-        const {email, name, password} = req.body;
+        const { email, name, password } = req.body;
 
         const userExist = await prismadb.user.findUnique({
             where: {
@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         });
 
-        if(userExist) {
-            res.status(422).json({error: "Email is already Taken"})
+        if (userExist) {
+            res.status(422).json({ error: "Email is already Taken" })
         }
 
         const hpass = await bcrypt.hash(password, 12);
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const user = await prismadb.user.create({
             data: {
                 email,
-                name, 
+                name,
                 hpass,
                 img: '',
                 emailVerified: new Date()

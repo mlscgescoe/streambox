@@ -1,8 +1,11 @@
 import Input from "@/components/input"
 import { useCallback, useState } from "react"
 import axios from "axios";
+import { signIn } from 'next-auth/react';
+import { useRouter } from "next/router";
 
 const auth = () => {
+    const router = useRouter();
 
     const [email, setmail] = useState('');
     const [name, setname] = useState('');
@@ -14,6 +17,21 @@ const auth = () => {
         setvarient((currentvarient) => currentvarient === 'login' ? 'register' : 'login')
     }, [])
 
+    const login = useCallback(async () => {
+        try {
+            await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+                callbackUrl: '/'
+            });
+
+            router.push('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }, [email, password, router])
+
     const register = useCallback(async () => {
         try {
             await axios.post('/api/register', {
@@ -21,10 +39,12 @@ const auth = () => {
                 name,
                 password
             });
+            login();
         } catch (error) {
             console.log(error)
         }
-    },[email, name, password])
+    }, [email, name, password, login])
+
 
     return (
         <div className='relative w-full min-h-screen h-full bg-[url("/images/bg-banner.jpeg")] overflow-x-hidden bg-center bg-cover bg-fixed bg-no-repeat'>
@@ -42,7 +62,7 @@ const auth = () => {
                                 {varient === 'register' && (
                                     <Input
                                         label="Username"
-                                        onChange={(e:any) => { setname(e.target.value) }}
+                                        onChange={(e: any) => { setname(e.target.value) }}
                                         id="name"
                                         value={name}
                                         type="text"
@@ -50,24 +70,24 @@ const auth = () => {
                                 )}
                                 <Input
                                     label="Email"
-                                    onChange={(e:any) => { setmail(e.target.value) }}
+                                    onChange={(e: any) => { setmail(e.target.value) }}
                                     id="email"
                                     type="email"
                                     value={email}
                                 />
                                 <Input
                                     label="Password"
-                                    onChange={(e:any) => { setpassword(e.target.value) }}
+                                    onChange={(e: any) => { setpassword(e.target.value) }}
                                     id="password"
                                     type="password"
                                     value={password}
                                 />
                             </div>
-                            <button onClick={register} className="bg-red-600 py-3 mt-4 text-white rounded-md w-full hover:bg-red-700 transition-all duration-200">
-                                {varient === 'login'? 'Login' : 'Sign Up'}
+                            <button onClick={varient === 'login' ? login : register} className="bg-red-600 py-3 mt-4 text-white rounded-md w-full hover:bg-red-700 transition-all duration-200">
+                                {varient === 'login' ? 'Login' : 'Sign Up'}
                             </button>
                             <p className="text-neutral-500 mt-8 text-center">
-                                {varient === 'login'? 'Not registered?' : 'Already Registered?'}<span className="text-white ml-1 hover:underline cursor-pointer" onClick={toggleVariant}>{varient === 'login'? 'Create an Account' : 'Login Here'}</span>
+                                {varient === 'login' ? 'Not registered?' : 'Already Registered?'}<span className="text-white ml-1 hover:underline cursor-pointer" onClick={toggleVariant}>{varient === 'login' ? 'Create an Account' : 'Login Here'}</span>
                             </p>
                         </div>
                     </div>
