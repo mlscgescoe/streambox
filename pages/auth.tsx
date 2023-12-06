@@ -1,26 +1,40 @@
 import Input from "@/components/input"
 import { useCallback, useState } from "react"
+import axios from "axios";
 
 const auth = () => {
 
-    const [mail, setmail] = useState('');
+    const [email, setmail] = useState('');
     const [name, setname] = useState('');
-    const [pass, setpass] = useState('');
+    const [password, setpassword] = useState('');
 
     const [varient, setvarient] = useState('login')
+
     const toggleVariant = useCallback(() => {
         setvarient((currentvarient) => currentvarient === 'login' ? 'register' : 'login')
     }, [])
 
+    const register = useCallback(async () => {
+        try {
+            await axios.post('/api/register', {
+                email,
+                name,
+                password
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    },[email, name, password])
+
     return (
         <div className='relative w-full min-h-screen h-full bg-[url("/images/bg-banner.jpeg")] overflow-x-hidden bg-center bg-cover bg-fixed bg-no-repeat'>
-            <div className="bg-black w-full h-screen lg:bg-opacity-50">
+            <div className="bg-zinc-900 w-full h-screen md:bg-opacity-50">
                 <nav className='px-12 py-5'>
-                    <img src="/images/logo.png" alt="Logo" className='h-12' />
+                    <img src="/images/logo.png" alt="Logo" className='md:h-12 h-8 mx-auto mt-2 md:mx-0 md:mt-0' />
                 </nav>
                 <div>
                     <div className="flex justify-center">
-                        <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
+                        <div className="bg-zinc-900 bg-opacity-70 px-16 py-16 self-center mt-2 md:w-2/5 lg:max-w-md rounded-md w-full">
                             <h2 className='text-white text-4xl mb-8 font-semibold'>
                                 {varient === 'login' ? 'Sign In' : 'Create account'}
                             </h2>
@@ -28,27 +42,28 @@ const auth = () => {
                                 {varient === 'register' && (
                                     <Input
                                         label="Username"
-                                        onChange={(e) => { setname(e.target.value) }}
-                                        id="uname"
+                                        onChange={(e:any) => { setname(e.target.value) }}
+                                        id="name"
                                         value={name}
+                                        type="text"
                                     />
                                 )}
                                 <Input
                                     label="Email"
-                                    onChange={(e) => { setmail(e.target.value) }}
+                                    onChange={(e:any) => { setmail(e.target.value) }}
                                     id="email"
                                     type="email"
-                                    value={mail}
+                                    value={email}
                                 />
                                 <Input
                                     label="Password"
-                                    onChange={(e) => { setpass(e.target.value) }}
-                                    id="pass"
+                                    onChange={(e:any) => { setpassword(e.target.value) }}
+                                    id="password"
                                     type="password"
-                                    value={pass}
+                                    value={password}
                                 />
                             </div>
-                            <button className="bg-red-600 py-3 mt-4 text-white rounded-md w-full hover:bg-red-700 transition-all duration-200">
+                            <button onClick={register} className="bg-red-600 py-3 mt-4 text-white rounded-md w-full hover:bg-red-700 transition-all duration-200">
                                 {varient === 'login'? 'Login' : 'Sign Up'}
                             </button>
                             <p className="text-neutral-500 mt-8 text-center">

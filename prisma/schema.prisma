@@ -6,6 +6,70 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  img String?
+  email String? @unique
+  emailVerified DateTime?
+  hpass String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  favouriteIds String[] @db.ObjectId
+  sessions Session[]
+  accounts Account[]
+}
+
+//for working with google auth
+model Account {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userID String @db.ObjectId
+  type String
+  provider String
+  providerAccID String
+  refreshToken String? @db.String
+  accessToken String? @db.String
+  expiresAt Int?
+  tokenType String?
+  scope String?
+  idToken String? @db.String
+  sessionState String?
+
+  //connecting user model to acc model using the field userID
+  user User @relation(fields: [userID], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccID])
+}
+
+model Session {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String @unique
+  userID String @db.ObjectId
+  expires DateTime
+
+  user User @relation(fields: [userID], references: [id], onDelete: Cascade)
+}
+
+model verificationToken {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  identifier String
+  token String @unique
+  expires DateTime
+
+  @@unique([identifier, token])
+}
+
+model Movie {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  description String
+  videoUrl String
+  thumbnailUrl String
+  genre String
+  duration String
 }
