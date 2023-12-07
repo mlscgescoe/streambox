@@ -4,6 +4,9 @@ import axios from "axios";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/router";
 
+import { FcGoogle } from 'react-icons/fc';
+import { FaGithub } from 'react-icons/fa';
+
 const auth = () => {
     const router = useRouter();
 
@@ -26,11 +29,11 @@ const auth = () => {
                 callbackUrl: '/'
             });
 
-            router.push('/')
+            router.push('/');
         } catch (error) {
             console.log(error)
         }
-    }, [email, password, router])
+    }, [email, password, router]);
 
     const register = useCallback(async () => {
         try {
@@ -86,6 +89,14 @@ const auth = () => {
                             <button onClick={varient === 'login' ? login : register} className="bg-red-600 py-3 mt-4 text-white rounded-md w-full hover:bg-red-700 transition-all duration-200">
                                 {varient === 'login' ? 'Login' : 'Sign Up'}
                             </button>
+                            <div className="flex flex-row items-center gap-4 mt-8 justify-center">
+                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all duration-150">
+                                        <FcGoogle size={30}/>
+                                    </div>
+                                    <div onClick={()=> signIn('github', {callbackUrl: '/'})} className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all duration-150">
+                                        <FaGithub size={30}/>
+                                    </div>
+                            </div>
                             <p className="text-neutral-500 mt-8 text-center">
                                 {varient === 'login' ? 'Not registered?' : 'Already Registered?'}<span className="text-white ml-1 hover:underline cursor-pointer" onClick={toggleVariant}>{varient === 'login' ? 'Create an Account' : 'Login Here'}</span>
                             </p>
