@@ -8,6 +8,9 @@ import GoogleProvider from 'next-auth/providers/google'
 
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "@/lib/mongodb";
+
 export default Nextauth ({
     providers: [
         GithubProvider ({
@@ -63,7 +66,7 @@ export default Nextauth ({
         signIn: '/auth'
     },
     debug: process.env.NODE_ENV === 'development',
-    adapter: PrismaAdapter(prismadb),
+    adapter: MongoDBAdapter(clientPromise),
     session: {
         strategy: 'jwt',
     },
