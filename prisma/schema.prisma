@@ -27,10 +27,10 @@ model User {
 //for working with google auth
 model Account {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  userID String @db.ObjectId
+  userId String @db.ObjectId
   type String
   provider String
-  providerAccountID String
+  providerAccountId String
   refreshToken String? @db.String
   accessToken String? @db.String
   expiresAt Int?
@@ -40,9 +40,9 @@ model Account {
   sessionState String?
 
   //connecting user model to acc model using the field userID
-  user User @relation(fields: [userID], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountID])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
