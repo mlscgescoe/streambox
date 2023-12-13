@@ -2,14 +2,10 @@ import Input from "@/components/input"
 import { useCallback, useState } from "react"
 import axios from "axios";
 import { signIn } from 'next-auth/react';
-import { useRouter } from "next/router";
-
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 
 const auth = () => {
-    const router = useRouter();
-
     const [email, setmail] = useState('');
     const [name, setname] = useState('');
     const [password, setpassword] = useState('');
@@ -25,15 +21,12 @@ const auth = () => {
             await signIn('credentials', {
                 email,
                 password,
-                redirect: false,
-                callbackUrl: '/'
+                callbackUrl: '/profiles'
             });
-
-            router.push('/');
         } catch (error) {
             console.log(error)
         }
-    }, [email, password, router]);
+    }, [email, password]);
 
     const register = useCallback(async () => {
         try {
@@ -95,22 +88,22 @@ const auth = () => {
                                 className="flex flex-row items-center gap-4 mt-8 justify-center">
 
                                 <div
-                                    onClick={() => signIn('google', { callbackUrl: '/' })}
+                                    onClick={() => signIn('google', { callbackUrl: '/profiles' })}
                                     className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all duration-150">
                                     <FcGoogle size={30} />
                                 </div>
 
                                 <div
-                                    onClick={() => signIn('github', { callbackUrl: '/' })}
+                                    onClick={() => signIn('github', { callbackUrl: '/profiles' })}
                                     className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all duration-150">
                                     <FaGithub size={30} />
                                 </div>
                             </div>
-                            <p 
+                            <p
                                 className="text-neutral-500 mt-8 text-center">
                                 {varient === 'login' ? 'Not registered?' : 'Already Registered?'}
-                                <span 
-                                    className="text-white ml-1 hover:underline cursor-pointer" 
+                                <span
+                                    className="text-white ml-1 hover:underline cursor-pointer"
                                     onClick={toggleVariant}>{varient === 'login' ? 'Create an Account' : 'Login Here'}
                                 </span>
                             </p>
