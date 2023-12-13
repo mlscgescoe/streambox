@@ -1,3 +1,4 @@
+import Billboard from "@/components/Banner";
 import Navbar from "@/components/Navbar";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { NextPageContext } from "next"
@@ -26,6 +27,7 @@ export default function Home() {
   return (
     <React.Fragment>
       <Navbar/>
+      <Billboard/>
     </React.Fragment>
   )
 }
