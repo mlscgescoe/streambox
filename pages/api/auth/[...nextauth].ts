@@ -1,4 +1,4 @@
-import Nextauth from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prismadb from "@/lib/prismadb";
 import { compare } from 'bcrypt'
@@ -10,8 +10,12 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
+import { PrismaClient } from "@prisma/client";
 
-export default Nextauth ({
+
+const prisma = new PrismaClient();
+export default NextAuth ({
+    adapter: PrismaAdapter(prisma),
     providers: [
         GithubProvider ({
             clientId: process.env.GITHUB_ID || '',
@@ -66,7 +70,6 @@ export default Nextauth ({
         signIn: '/auth'
     },
     debug: process.env.NODE_ENV === 'development',
-    adapter: MongoDBAdapter(clientPromise),
     session: {
         strategy: 'jwt',
     },

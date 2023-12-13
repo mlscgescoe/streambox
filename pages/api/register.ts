@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 email,
                 name,
                 hpass,
-                img: '',
+                image: '',
                 emailVerified: new Date()
             }
         });

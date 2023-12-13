@@ -13,15 +13,15 @@ datasource db {
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  img String?
+  image String?
   email String? @unique
   emailVerified DateTime?
   hpass String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  favouriteIds String[] @db.ObjectId
   sessions Session[]
   accounts Account[]
+  favouriteIds String[] @db.ObjectId
 }
 
 //for working with google auth
@@ -31,13 +31,13 @@ model Account {
   type String
   provider String
   providerAccountId String
-  refreshToken String? @db.String
-  accessToken String? @db.String
-  expiresAt Int?
-  tokenType String?
+  refresh_token String? @db.String
+  access_token String? @db.String
+  expires_at Int?
+  token_type String?
   scope String?
-  idToken String? @db.String
-  sessionState String?
+  id_token String? @db.String
+  session_state String?
 
   //connecting user model to acc model using the field userID
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -48,10 +48,10 @@ model Account {
 model Session {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String @unique
-  userID String @db.ObjectId
+  userId String @db.ObjectId
   expires DateTime
 
-  user User @relation(fields: [userID], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model verificationToken {
