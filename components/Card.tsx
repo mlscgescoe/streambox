@@ -1,12 +1,14 @@
 import React from 'react'
 import { BsFillPlayFill } from 'react-icons/bs'
 import FavButton from './FavButton'
+import { Router, useRouter } from 'next/router'
 
 type cardProps = {
     data: Record<string, any>,
 }
 
 const Card: React.FC<cardProps> = ({ data }) => {
+    const router = useRouter();
     return (
         <React.Fragment>
             <div className='group bg-zinc-900 col-span relative h-[12vw]'>
@@ -87,7 +89,7 @@ const Card: React.FC<cardProps> = ({ data }) => {
                                     duration-200
                                     hover:bg-neutral-300
                                 '
-                                onClick={() => { }}>
+                                onClick={() => router.push(`/watch/${data?.id}`)}>
                                     <BsFillPlayFill size={20}/>
                             </div>
                             <FavButton movieId={data?.id}/>
