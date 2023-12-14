@@ -6,7 +6,7 @@ import { without } from "lodash";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === 'POST') {
-            const { currentUser } = await serverAuth(req);
+            const { currentUser } = await serverAuth(req, res);
             const { movieId } = req.body
 
             const existingMovie = await prismadb.movie.findUnique({
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
                 data: {
                     favouriteIds: {
-                        push: movieId   
+                        push: movieId
                     }
                 }
             });
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         if (req.method === 'DELETE') {
-            const { currentUser } = await serverAuth(req);
+            const { currentUser } = await serverAuth(req, res);
             const { movieId } = req.body
 
             const existingMovie = await prismadb.movie.findUnique({
@@ -43,8 +43,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             })
 
-            if(!existingMovie) {
-                throw new Error ("Invalid ID")
+            if (!existingMovie) {
+                throw new Error("Invalid ID")
             }
 
             const updateFav = without(currentUser?.favouriteIds, movieId)

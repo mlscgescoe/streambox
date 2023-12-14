@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prismadb from "@/lib/prismadb";
 import { compare } from 'bcrypt'
@@ -14,21 +14,21 @@ import { PrismaClient } from "@prisma/client";
 
 
 const prisma = new PrismaClient();
-export default NextAuth ({
+export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
-        GithubProvider ({
+        GithubProvider({
             clientId: process.env.GITHUB_ID || '',
             clientSecret: process.env.GITHUB_SECRET || ''
         }),
-        GoogleProvider ({
+        GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || '',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
         }),
         Credentials({
             id: 'credentials',
             name: 'Credentials',
-            credentials :{
+            credentials: {
                 email: {
                     label: 'Email',
                     type: 'text'
@@ -38,8 +38,8 @@ export default NextAuth ({
                     type: 'password'
                 }
             },
-            async authorize (credentials) {
-                if(!credentials?.email || !credentials?.password) {
+            async authorize(credentials) {
+                if (!credentials?.email || !credentials?.password) {
                     throw new Error("Email Password Required");
                 }
 
@@ -54,11 +54,11 @@ export default NextAuth ({
                 }
 
                 const isCorrect = await compare(
-                    credentials.password, 
+                    credentials.password,
                     user.hpass
                 );
-                
-                if(!isCorrect) {
+
+                if (!isCorrect) {
                     throw new Error("Incorrect Password")
                 }
 
@@ -77,4 +77,6 @@ export default NextAuth ({
         secret: process.env.NEXTAUTH_JWT_SECRET
     },
     secret: process.env.NEXTAUTH_SECRET
-})
+}
+
+export default NextAuth(authOptions)
