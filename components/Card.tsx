@@ -1,7 +1,9 @@
 import React from 'react'
 import { BsFillPlayFill } from 'react-icons/bs'
+import { FaInfo } from "react-icons/fa";
 import FavButton from './FavButton'
 import { Router, useRouter } from 'next/router'
+import useInfo from '@/hooks/useInfo'
 
 type cardProps = {
     data: Record<string, any>,
@@ -9,6 +11,8 @@ type cardProps = {
 
 const Card: React.FC<cardProps> = ({ data }) => {
     const router = useRouter();
+    const { openModal } = useInfo();
+
     return (
         <React.Fragment>
             <div className='group bg-zinc-900 col-span relative h-[12vw]'>
@@ -90,9 +94,27 @@ const Card: React.FC<cardProps> = ({ data }) => {
                                     hover:bg-neutral-300
                                 '
                                 onClick={() => router.push(`/watch/${data?.id}`)}>
-                                    <BsFillPlayFill size={20}/>
+                                <BsFillPlayFill size={20} />
                             </div>
-                            <FavButton movieId={data?.id}/>
+                            <FavButton movieId={data?.id} />
+                            <div
+                                onClick={() => openModal(data?.id)}
+                                className='
+                                    cursor-pointer
+                                    ml-auto
+                                    w-6 lg:w-10
+                                    h-6 lg:h-10
+                                    border-2
+                                    border-white
+                                    rounded-full
+                                    flex
+                                    justify-center
+                                    items-center
+                                    transition-all
+                                    duration-200
+                                    hover:border-neutral-300'>
+                                <FaInfo size={15} className='text-white' />
+                            </div>
                         </div>
                         <p className='text-green-400 font-semibold mt-4'>
                             New <span className='text-white'>2003</span>
