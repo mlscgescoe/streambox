@@ -1,5 +1,6 @@
 import React from 'react'
 import { BsFillPlayFill } from 'react-icons/bs'
+import FavButton from './FavButton'
 
 type cardProps = {
     data: Record<string, any>,
@@ -89,6 +90,7 @@ const Card: React.FC<cardProps> = ({ data }) => {
                                 onClick={() => { }}>
                                     <BsFillPlayFill size={20}/>
                             </div>
+                            <FavButton movieId={data?.id}/>
                         </div>
                         <p className='text-green-400 font-semibold mt-4'>
                             New <span className='text-white'>2003</span>

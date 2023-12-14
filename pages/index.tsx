@@ -2,6 +2,7 @@ import Banner from "@/components/Banner";
 import MovieList from "@/components/MovieList";
 import Navbar from "@/components/Navbar";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useFavouriteList from "@/hooks/useFavouriteList";
 import useList from "@/hooks/useList";
 import { NextPageContext } from "next"
 import { getSession, signOut } from "next-auth/react"
@@ -25,6 +26,7 @@ export async function getServerSideProps(context: NextPageContext) {
 export default function Home() {
 
   const { data: movies = [] } = useList();
+  const { data: favourites = [] } = useFavouriteList();
 
   return (
     <React.Fragment>
@@ -32,6 +34,7 @@ export default function Home() {
       <Banner />
       <div className="mb-40">
         <MovieList title="Trending Now" data={movies} />
+        <MovieList title="Favourites" data={favourites} />
       </div>
     </React.Fragment>
   )
