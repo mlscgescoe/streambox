@@ -4,6 +4,7 @@ import axios from "axios";
 import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import {toast} from 'react-hot-toast'
 
 const Auth = () => {
     const [email, setmail] = useState('');
@@ -23,7 +24,9 @@ const Auth = () => {
                 password,
                 callbackUrl: '/profiles'
             });
+            toast.success('Successfully Logged In')
         } catch (error) {
+            toast.error('Something went wrong')
             console.log(error)
         }
     }, [email, password]);
@@ -36,7 +39,9 @@ const Auth = () => {
                 password
             });
             login();
+            toast.success('Successfully Signed Up')
         } catch (error) {
+            toast.error('Something went wrong')
             console.log(error)
         }
     }, [email, name, password, login])
